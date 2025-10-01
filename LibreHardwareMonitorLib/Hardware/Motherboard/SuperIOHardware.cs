@@ -575,6 +575,29 @@ internal sealed class SuperIOHardware : Hardware
 
                 switch (model)
                 {
+                    case Model.B850I_EDGE_TI_WIFI:
+                        // ITX board - limited fan headers
+                        v.Add(new Voltage("+12V", 0));
+                        v.Add(new Voltage("+5V", 1));
+                        v.Add(new Voltage("CPU Northbridge/SoC", 2));
+                        v.Add(new Voltage("DIMM", 3, 1, 1));
+                        v.Add(new Voltage("Vcore", 4, -1, 2));
+                        v.Add(new Voltage("+3.3V", 8));
+                        v.Add(new Voltage("+3V Standby", 11));
+                        v.Add(new Voltage("AVSB", 12));
+                        v.Add(new Voltage("CMOS Battery", 13));
+
+                        // Clear default fans and add only working ones
+                        f.Clear();
+                        f.Add(new Fan("CPU Fan", 0));
+                        f.Add(new Fan("System Fan", 2)); // SYS_FAN header (controls both case fans and SSD fan)
+
+                        c.Clear();
+                        c.Add(new Control("CPU Fan", 0));
+                        c.Add(new Control("System Fan", 2));
+
+                        break;
+
                     case Model.X870E_TOMAHAWK_WIFI:
                     case Model.X870E_EDGE_TI_WIFI:
                         v.Add(new Voltage("+12V", 0));
